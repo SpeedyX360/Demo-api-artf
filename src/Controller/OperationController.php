@@ -78,10 +78,7 @@ class OperationController extends AbstractController
                 $id_user = $this->entityManager->getRepository(User::class)->findOneBy(['id' => $data['id_user']]);
                 $operation->setUser($id_user);
             }
-            if ($data['statut'] !== null) {
-                $statut = $this->entityManager->getRepository(Statut::class)->findOneBy(['id' => $data['statut']]);
-                $operation->setStatut($statut);
-            }
+            
             // Vérifier si le montant total des opérations pour cet expéditeur dépasse 1 000 000
     $montantTotalDuMois = $this->entityManager->getRepository(Operation::class)
     ->getMontantTotalDuMois($data['numero_cni_expediteur']);
@@ -92,9 +89,20 @@ $montantTotalDuMois += $data['montant'];
 
             // Si le montant total dépasse 1 000 000, retourner un message d'avertissement mais considérer l'opération enregistrée
     if ($montantTotalDuMois > 1000000) {
+    // if ($data['statut'] !== null) {
+        $statut = $this->entityManager->getRepository(Statut::class)->findOneBy(['id' => 1]);
+        $operation->setStatut($statut);
+        $this->entityManager->flush();
+        // }
         return new JsonResponse([
             'message' => 'Le montant total des opérations dépasse la limite autorisée de 1 000 000 dans ce mois.',
             'montant_total' => $montantTotalDuMois,  'code' => 200], Response::HTTP_OK);
+    }else {
+        if ($data['statut'] !== null) {
+            $statut = $this->entityManager->getRepository(Statut::class)->findOneBy(['id' => $data['statut']]);
+            $operation->setStatut($statut);
+        }
+        $this->entityManager->flush();
     }
 
     // Si l'opération est enregistrée sans dépasser la limite, répondre normalement
