@@ -29,7 +29,7 @@ class JWTEventExceptionListenerSubscriber implements EventSubscriberInterface
  * Elle permet d'enrichir la réponse avec les informations de l'utilisateur authentifié,
  * son administration, et son rôle pour fournir plus de contexte au client après une connexion réussie.
  *
- * *@author Orphée Lié <lieloumloum@gmail.com>
+ * *@author Michel,Daryon et Aristote
  * 
  * @param AuthenticationSuccessEvent $event L'événement d'authentification réussie.
  */

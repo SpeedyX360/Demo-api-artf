@@ -60,8 +60,7 @@ class Operation
         $this->uuid = Uuid::v7()->toString();
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTimeImmutable();
-         
-     }
+    }
 
     public function getId(): ?int
     {
@@ -116,6 +115,7 @@ class Operation
     {
         return $this->numero_cni_expediteur;
     }
+
 
     public function setNumeroCNIExpediteur(string $numero_cni_expediteur): self
     {

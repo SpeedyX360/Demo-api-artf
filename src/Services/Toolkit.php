@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 **  Class ToolKit
 **  Cette classe contient des fonctions utiles pour travailler avec les données utilisateur et les entités.
 **  pour ne pas surcharger les code de l'application et les controllers
-**  @author Orphée Lié <lieloumloum@gmail.com>
+**  @author Michel,Dayron et Aristote
 */
 
 class Toolkit 
@@ -46,7 +46,7 @@ class Toolkit
      * Renvoie un tableau de noms d'entité avec la première lettre en majuscule
      * conçu pour intervenir au sein de la fonction qui se charge de retourner les select
      * 
-     * @author Orphée Lié <lieloumloum@gmail.com>
+     * @author Michel,Dayron et Aristote
      */
     public function formatArrayEntity(array $dataSelect): array
     {
@@ -66,7 +66,7 @@ class Toolkit
      * @return array
      * 
      * Renvoie un tableau pour peupler les select de l'application avec les ID et les labels ou descriptions de chaque entité
-     * @author Orphée Lié <lieloumloum@gmail.com>
+     * @author Michel,Dayron et Aristote
      */
     public function formatArrayEntityLabel(array $dataSelect): array
     {
@@ -106,7 +106,7 @@ class Toolkit
      * @param array $input Le tableau d'entrée à transformer.
      * @return array Le tableau transformé.
      * 
-     * *@author Orphée Lié <lieloumloum@gmail.com>
+     * *@author Michel,Dayron et Aristote
      * 
      */
     public function transformArray(array $input): array
@@ -140,7 +140,7 @@ class Toolkit
      * 
      * creation des operations de caisse pour chaque partenaire sur chaque ligne d'une caisse
      * 
-     * @author Orphée Lié <lieloumloum@gmail.com>
+     * @author Michel,Dayron et Aristote
      */
 
     /**
@@ -153,7 +153,7 @@ class Toolkit
      * @param JWTTokenInterface $token
      * @return string
      * 
-     * *@author Orphée Lié <lieloumloum@gmail.com>
+     * *@author Michel,Dayron et Aristote
      * 
      */
 
@@ -181,7 +181,7 @@ class Toolkit
      * @param string $class_name Le nom de la classe de l'entité à paginer.
      * @param string $groupe_attribute Le groupe de sérialisation pour filtrer les attributs lors de la sérialisation des résultats.
      * 
-     * *@author  Orphée Lié <lieloumloum@gmail.com>
+     * *@author  Michel,Dayron et Aristote
      * 
      * @return array Les données paginées et les informations de pagination.
      */
@@ -252,7 +252,7 @@ class Toolkit
      *
      * @return string Le numéro de reçu unique.
      * 
-     * *@author Orphée Lié <lieloumloum@gmail.com>
+     * *@author Michel,Dayron et Aristote
      * 
      */
     
@@ -263,7 +263,7 @@ class Toolkit
      * @param string $receiptNumber Le numéro de reçu à vérifier.
      * @return bool True si le reçu existe, False sinon.
      * 
-     * *@author Orphée Lié <lieloumloum@gmail.com>
+     * *@author Michel,Dayron et Aristote
      */
 
 }

@@ -2,11 +2,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use Pagerfanta\Pagerfanta;
 use App\Entity\Organisation;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Services\Toolkit;
 
-
+// class UserController
 #[Route('/api/v1/users')]
 class UserController extends AbstractController
 {
@@ -38,6 +36,7 @@ class UserController extends AbstractController
         $this->toolkit = $toolkit;
     }
 
+    // création de data select
     #[Route('/data-select', name: 'app_app_data_select', methods: ['POST'])]
     public function dataSelect(Request $request): JsonResponse
     {
@@ -47,6 +46,7 @@ class UserController extends AbstractController
         return  new JsonResponse(($allSelectEntity), Response::HTTP_OK);        
     }
 
+    // recuperer la liste des utilisateurs
     #[Route('/', name: 'users_list', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
@@ -54,6 +54,7 @@ class UserController extends AbstractController
         return new JsonResponse($response, Response::HTTP_OK);
     }
 
+    // recuperer un seule utilisateur
     #[Route('/{id}', name: 'users_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
@@ -68,6 +69,7 @@ class UserController extends AbstractController
         }
     }
 
+    // creation d'un utilisateur
     #[Route('/', name: 'users_create', methods: ['POST'])]
     public function create(Request $request, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
@@ -96,31 +98,33 @@ class UserController extends AbstractController
             return new JsonResponse(['message' => "un problème est survenu lors de la création de l utilisateur", 'code' => 500], Response::HTTP_INTERNAL_SERVER_ERROR);}
     }
 
+    // mise à jour d'un utilisateur
     #[Route('/{id}', name: 'users_update', methods: ['PUT'])]
     public function update(int $id, Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
-       try {
-            $user = $this->usersRepository->find($id);
-            $data = json_decode($request->getContent(), true);
-            $user->setNom($data['nom'] ?? $user->getNom())
-                    ->setRoles($data['roles'] ?? $user->getRoles())
-                    ->setTelephone($data['telephone'] ?? $user->getTelephone())
-                    ->setUpdatedAt(new \DateTimeImmutable());
-            if ($data['password'] !== null) {
-                $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
-                $user->setPassword($hashedPassword);
+        try {
+                $user = $this->usersRepository->find($id);
+                $data = json_decode($request->getContent(), true);
+                $user->setNom($data['nom'] ?? $user->getNom())
+                        ->setRoles($data['roles'] ?? $user->getRoles())
+                        ->setTelephone($data['telephone'] ?? $user->getTelephone())
+                        ->setUpdatedAt(new \DateTimeImmutable());
+                if ($data['password'] !== null) {
+                    $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
+                    $user->setPassword($hashedPassword);
+                }
+                if ($data['id_organisation'] !== null) {
+                    $id_organisation = $this->entityManager->getRepository(Organisation::class)->findOneBy(['id' => $data['id_organisation']]);
+                    $user->setIdOrganisation($id_organisation);
+                }
+                $this->entityManager->flush();
+                return new JsonResponse(['message' => 'Utilisateur modifié avec succès', 'code' => 200], Response::HTTP_OK);
+            } catch (\Throwable $th) {
+                return new JsonResponse(['message' => 'Utilisateur introuvable', 'code' => 404], Response::HTTP_NOT_FOUND);
             }
-            if ($data['id_organisation'] !== null) {
-                $id_organisation = $this->entityManager->getRepository(Organisation::class)->findOneBy(['id' => $data['id_organisation']]);
-                $user->setIdOrganisation($id_organisation);
-            }
-            $this->entityManager->flush();
-            return new JsonResponse(['message' => 'Utilisateur modifié avec succès', 'code' => 200], Response::HTTP_OK);
-        } catch (\Throwable $th) {
-            return new JsonResponse(['message' => 'Utilisateur introuvable', 'code' => 404], Response::HTTP_NOT_FOUND);
-        }
     }
 
+    // suppression d'un utilisateur
     #[Route('/{id}', name: 'users_delete', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {
