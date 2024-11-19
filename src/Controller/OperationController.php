@@ -2,8 +2,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Operation;
 use App\Entity\Statut;
+use App\Entity\Operation;
+use App\Services\Toolkit;
 use App\Repository\OperationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,9 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Services\Toolkit;
 
 // Class OperationController
 #[Route('/api/v1/operations')]
@@ -116,9 +117,15 @@ class OperationController extends AbstractController
 
     // mise à jour d'une operation
     #[Route('/{id}', name: 'operation_update', methods: ['PUT'])]
+    // #[IsGranted("ROLE_ADMIN", message:"Seul un administrateur peut modifier une opération")]
     public function update(int $id, Request $request): JsonResponse
     {
+        // dd($this->toolkit->getRoleUser($request)[0]);
     try {
+        if ($this->toolkit->getRoleUser($request)[0] !== "ROLE_ADMIN") {
+            return new JsonResponse(['message' => 'Vous n\'avez pas les droits pour modifier cette opération', 'code' => 403], Response::HTTP_FORBIDDEN);
+            # code...
+        }
         $operation = $this->OperationRepository->find($id);
         $data = json_decode($request->getContent(), true);
         $operation->setMontant($data['montant'] ?? $operation->getMontant())
