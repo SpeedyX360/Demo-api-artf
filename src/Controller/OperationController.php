@@ -123,7 +123,7 @@ class OperationController extends AbstractController
         // dd($this->toolkit->getRoleUser($request)[0]);
     try {
         if ($this->toolkit->getRoleUser($request)[0] !== "ROLE_ADMIN") {
-            return new JsonResponse(['message' => 'Vous n\'avez pas les droits pour modifier cette opération', 'code' => 403], Response::HTTP_FORBIDDEN);
+            return new JsonResponse(['message' => 'Vous n\'avez pas les droits pour modifier cette opération', 'code' => 401], Response::HTTP_UNAUTHORIZED);
             # code...
         }
         $operation = $this->OperationRepository->find($id);
@@ -152,18 +152,18 @@ class OperationController extends AbstractController
     }
 
     // suppression d'une operation
-    #[Route('/{id}', name: 'operation_delete', methods: ['DELETE'])]
-    public function delete(int $id): JsonResponse
-    {
-        try {
-            $operation = $this->OperationRepository->find($id);        
-            $this->entityManager->remove($operation);
-            $this->entityManager->flush();
-            return new JsonResponse(['message' => 'Operation supprimée avec succès', 'code' => 200], Response::HTTP_OK);
-        } catch (\Throwable $th) {
-            return new JsonResponse(['message' => 'Operation introuvable', 'code' => 404], Response::HTTP_NOT_FOUND);
-        }
-    }
+    // #[Route('/{id}', name: 'operation_delete', methods: ['DELETE'])]
+    // public function delete(int $id): JsonResponse
+    // {
+    //     try {
+    //         $operation = $this->OperationRepository->find($id);        
+    //         $this->entityManager->remove($operation);
+    //         $this->entityManager->flush();
+    //         return new JsonResponse(['message' => 'Operation supprimée avec succès', 'code' => 200], Response::HTTP_OK);
+    //     } catch (\Throwable $th) {
+    //         return new JsonResponse(['message' => 'Operation introuvable', 'code' => 404], Response::HTTP_NOT_FOUND);
+    //     }
+    // }
 
     // Récupérer la somme des montants pour un expéditeur dans le mois
     #[Route("/montants/{numero_cni_expediteur}", name: "operation_montants", methods: ['GET'])]

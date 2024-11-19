@@ -83,8 +83,8 @@ private Collection $id_user;
 
     public function getRoles(): array
     {
-        // Convertit la chaîne de caractères en tableau si nécessaire
-        return $this->roles ? explode(',', $this->roles) : ['ROLE_USER'];
+        // Convertit la chaîne de caractères en tableau si nécessaire        
+        return $this->roles ? explode(',', $this->roles) : ['ROLE_USER'];        
     }
 
     public function setRoles(string $roles): static

@@ -40,11 +40,12 @@ public function onSecurityAuthenticationSuccess(AuthenticationSuccessEvent $even
     $data = $event->getData();  // Données de réponse à retourner au client après l'authentification
     // Rechercher l'utilisateur complet (entité User) depuis la base de données
     $trueUser = $this->entityManager->getRepository(User::class)->find($user->getId());
-    //  dd($user);
     // Récupérer l'entité Administration associée à cet utilisateur
     $organisation = $this->entityManager->getRepository(Organisation::class)->find(
         $trueUser->getIdOrganisation()->getId()
     );
+
+
 
 
     // Sérialiser l'entité utilisateur avec le groupe 'user' pour n'inclure que les données pertinentes
@@ -56,6 +57,8 @@ public function onSecurityAuthenticationSuccess(AuthenticationSuccessEvent $even
 
     // Décoder les données sérialisées en tableaux PHP
     $data_user = json_decode($data_user, true);
+    $data_user['roles'] = $data_user['roles'][0]; 
+    // dd($data_user);
     $organisation = json_decode($organisation, true);
 
 
